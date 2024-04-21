@@ -1,0 +1,341 @@
+<template>
+  <div class="services">
+    <div v-if="this.code === 0">loading...</div>
+    <div v-if="this.code === 404">not found</div>
+    <div v-if="this.code === 200">
+      <div class="cub">
+        <img src="https://violy.astroon.pro/assets/img/cub_four.png" />
+      </div>
+      <div class="left_ele">
+        <img src="https://violy.astroon.pro/assets/img/cub_three.png" />
+      </div>
+      <div class="pages_hed_bg">
+        <h1 >This is an Services page</h1>
+
+        <!--<p>
+      https://violy.astroon.pro/posts.html
+      https://www.orizon.co/about linki
+      https://caveni.com/services/ linki
+      https://brights.io/machine-learning linki
+    </p>-->
+      </div>
+      <div class="ab_containr">
+        <div class="pr_select_bx" >
+          <div v-for="item in postebi" :key="item.id" class="sel_item_bx">
+           <!-- <div class="ico_1" v-if="item.ico == 1">old</div>
+            <div class="ico_2" v-if="item.ico == 2">new</div>
+            <div class="ico_3" v-if="item.ico == 3">brand new</div>-->
+            <div >
+              <img  class="serv_img" v-bind:src="baseurl +item.photo_name"   :alt="item.title" width="100%" />
+            </div>
+            
+            <!-- <div>
+                    {{item.id + 'this is id'}}
+                </div>-->
+            <div class="title">
+              {{ item.title }}
+            </div>
+            <div class="description">{{ item.desc }}</div>
+            
+            <div>
+
+
+                  <div class="mybtn_01">Development of a Web API</div>
+                  <div class="mybtn_02">Mobile App Creation</div>
+                  <div class="mybtn_03">E-Commerce Implementation</div>
+                  <div class="mybtn_04">Graphic Design</div>
+                  <div class="mybtn_05">Responsive Integration</div>
+            </div>
+
+          
+
+            <div class="mybtn_callus">
+              <a :href="'view/'+item.service_id+'/'+item.title.toLowerCase()">
+              
+                view service<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-right"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--
+      <div v-for="post in postebi" :key="post.id">
+        <div>this is title: {{ post.title }}</div>
+        {{ post.service_id }}
+        {{ post.desc }}
+      </div>-->
+
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "Services",
+  data: () => ({
+    postebi: [],
+    code: 0,
+    photos : [],
+    baseurl : 'https://wdgurus.co.uk/admin/upload/services/',
+    ebtnelements : {
+      el_01  : {
+        id: 1,
+              mybtn_01 : 'Development of a Web API',
+              mybtn_02 : 'Mobile App Creation',
+              mybtn_03 : 'E-Commerce Implementation',
+              mybtn_04 : 'Graphic Design',
+              mybtn_05 : 'Responsive Integration<',
+      },
+      el_02 : {
+        id : 2,
+              mybtn_01 : 'Development of a Web API',
+              mybtn_02 : 'Mobile App Creation',
+              mybtn_03 : 'E-Commerce Implementation',
+              mybtn_04 : 'Graphic Design',
+              mybtn_05 : 'Responsive Integration<',
+      },
+      el_03 : {
+        id : 3,
+              mybtn_01 : 'Development of a Web API',
+              mybtn_02 : 'Mobile App Creation',
+              mybtn_03 : 'E-Commerce Implementation',
+              mybtn_04 : 'Graphic Design',
+              mybtn_05 : 'Responsive Integration<',
+      }
+    }
+  }),
+  created() {
+    //console.log(this.$route.params.id)
+    
+  },
+  mounted(){
+        this.getList()
+        
+  },
+  methods: {
+    getList() {
+    this.code = 0;
+    axios
+      .get("https://api.wdgurus.co.uk/v1/services/list")
+      .then((response) => {
+        //console.log(response);
+        //console.log(response.data.data);
+        if (response.status == 200) {
+          this.code = 200;
+          this.postebi = response.data.data;
+           this.photos = response.data.data.images;
+           this.postebi.myelements = this.ebtnelements;
+              //console.log(this.postebi)
+              //console.log(this.ebtnelements)
+            
+           
+        } else {
+          this.code = 404;
+        }
+      })
+      .catch((error) => {
+        this.code = 404;
+        console.log(error);
+      });
+  },
+   getDetail(id) {
+    this.code = 0;
+    axios
+      .get("https://api.wdgurus.co.uk/v1/services/" + id)
+      .then((response) => {
+        console.log(response);
+        console.log(response.data.data);
+        if (response.status == 200) {
+          this.code = 200;
+          this.postebi = response.data.data;
+        } else {
+          this.code = 404;
+        }
+      })
+      .catch((error) => {
+        this.code = 404;
+        console.log(error);
+      });
+  }
+  },
+  
+};
+</script>
+
+<style scoped>
+.pages_hed_bg {
+  width: 100%;
+  height: 395px;
+  background: #040728;
+  float: left;
+}
+.pages_hed_bg h1 {
+  font-size: 42px;
+  color: #fff;
+  position: relative;
+  line-height: 72px;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 50px;
+}
+.pages_hed_bg h1::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: #bc38c9;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ab_containr {
+  width: 100%;
+  min-height: 750px;
+  background: rgb(255, 255, 255);
+  float: left;
+}
+.pr_select_bx {
+  width: 1080px;
+  margin: 0 auto;
+  min-height: 500px;
+  margin-top: -100px !important;
+  z-index: 1;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 45% 45%;
+}
+.pr_select_bx img {
+  width: 100%;
+}
+.sel_item_bx {
+  background: white;
+  margin: 10px;
+  min-height: 450px;
+  box-shadow: 0px 4px 40px rgb(0 0 0 / 13%);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: 0.3s;
+}
+.title {
+  background: #6d758e;
+  color: white;
+  padding: 10px 20px;
+  float: left;
+  border-radius: 4px;
+  margin: 10px;
+}
+.description {
+  float: left;
+  background: #ffded2a8;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  font-size: 14px;
+      text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 9;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.ico_1 {
+  background: red;
+  padding: 2px 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 4px;
+  z-index: 5;
+  color: #fff;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+}
+.ico_2 {
+  background: rgb(255, 232, 25);
+  padding: 2px 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 4px;
+  z-index: 5;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.ico_3 {
+  background: green;
+  padding: 2px 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 4px;
+  z-index: 5;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.mybtn_callus {
+  background: blanchedalmond;
+  padding: 10px;
+  float: left;
+  margin: 20px 153px;
+  font-size: 18px;
+  border-radius: 4px;
+  font-weight: bold;
+  position: relative;
+  padding-right: 35px;
+}
+.mybtn_callus a {
+  color: rgb(7, 7, 7);
+  text-decoration: none;
+  font-weight: 100;
+}
+.mybtn_callus:hover {
+  background: #cec6c7;
+  cursor: pointer;
+  color: rgb(48, 46, 46);
+}
+.mybtn_callus a svg {
+  position: absolute;
+  right: 10px;
+  top: 30%;
+}
+.sel_item_bx:hover {
+  transform: translate(-10px, -10px);
+}
+.serv_img{
+  max-height: 288px;
+  object-fit: contain;
+    height: 100%;
+}
+@media only screen and (max-width: 980px) {
+  .pr_select_bx {
+    width: 100% !important;
+    display: block;
+  }
+  .mybtn_callus {
+    margin: 20px 100px;
+  }
+  .pages_hed_bg h1 {
+    margin-top: 37px;
+  }
+}
+</style>
